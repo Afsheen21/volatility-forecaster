@@ -1,12 +1,13 @@
 # Volatility Forecaster 📈
+![API Demo](DEMO.PNG)
 
 ![CI](https://github.com/Afsheen21/volatility-forecaster/actions/workflows/ci.yml/badge.svg)
 
-A machine learning system that predicts next-day stock volatility, served as a live API with automated testing and containerization.
+A machine learning system that predicts next-day stock volatility, served as a live API with automated testing, CI, and containerized deployment.
 
 ## Overview
 
-This project pulls historical stock data, engineers time-series features, and trains models to forecast next-day volatility. The trained model is served through a FastAPI REST API that works for any publicly traded stock ticker, backed by automated tests and a CI pipeline.
+This project pulls historical stock data, engineers time-series features, and trains models to forecast next-day volatility. The trained model is served through a FastAPI REST API that works for any publicly traded stock ticker, backed by automated tests, a CI pipeline, and a Docker container ready for deployment.
 
 ## Features
 
@@ -16,7 +17,7 @@ This project pulls historical stock data, engineers time-series features, and tr
 - Live prediction API — request any stock ticker, get a real-time volatility forecast
 - Automated tests covering the home endpoint, valid predictions, and error handling
 - CI pipeline (GitHub Actions) that runs tests on every push
-- Dockerized for portable deployment
+- Fully containerized with Docker, built and verified working end-to-end
 
 ## Tech Stack
 
@@ -29,6 +30,7 @@ Python, yfinance, pandas, scikit-learn, FastAPI, Uvicorn, pytest, Docker, GitHub
 3. **`main.py`** — FastAPI service that loads the trained model and exposes a `/predict/{ticker}` endpoint, recalculating live features for any requested stock
 4. **`test_main.py`** — automated tests verifying the API's core behavior
 5. **`.github/workflows/ci.yml`** — runs the test suite automatically on every push
+6. **`Dockerfile`** — packages the entire application so it runs identically anywhere
 
 ## Model Performance
 
@@ -39,6 +41,20 @@ Python, yfinance, pandas, scikit-learn, FastAPI, Uvicorn, pytest, Docker, GitHub
 
 The Random Forest model was selected for deployment. Feature importance analysis showed `Volatility_lag1` (yesterday's volatility) as the dominant predictor — consistent with the well-documented "volatility clustering" phenomenon in financial markets.
 
+## Example Request
+
+```
+GET /predict/AAPL
+```
+
+```json
+{
+  "ticker": "AAPL",
+  "predicted_next_day_volatility": 0.3819,
+  "as_of_date": "2026-08-06"
+}
+```
+
 ## Running It Locally
 
 **1. Clone and set up**
@@ -48,4 +64,40 @@ cd volatility-forecaster
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+**2. Collect data and train the model**
+```bash
+python fetch_data.py
+python train_model.py
+```
+
+**3. Run the API**
+```bash
+uvicorn main:app --reload
+```
+Visit `http://127.0.0.1:8000/docs` for interactive API documentation.
+
+**4. Run tests**
+```bash
+pytest test_main.py -v
+```
+
+**5. Run with Docker**
+```bash
+docker build -t volatility-forecaster .
+docker run -p 8000:8000 volatility-forecaster
+```
+Then visit `http://localhost:8000/docs`
+
+## Future Improvements
+
+- Add ARIMA/classical time-series methods for comparison against the ML approach
+- Add more granular volatility windows (e.g. 5-day, 60-day)
+- Expand test coverage to include model performance regression checks
+- Add a simple frontend for non-technical users to query predictions
+
+## Author
+
+Built by [Afsheen Fatima](https://github.com/Afsheen21) as a portfolio project demonstrating end-to-end ML engineering — from data collection through model deployment, automated testing, and containerization.
 
