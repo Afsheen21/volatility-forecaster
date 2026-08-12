@@ -1,5 +1,5 @@
 # Volatility Forecaster 📈
-![API Demo](![alt text](<Image demo-1.png>))
+![API Demo](<Image demo.png>))
 
 ![CI](https://github.com/Afsheen21/volatility-forecaster/actions/workflows/ci.yml/badge.svg)
 
