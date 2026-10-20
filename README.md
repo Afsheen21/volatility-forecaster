@@ -1,5 +1,4 @@
 # Volatility Forecaster 📈
-<img src="Image%20demo.png" alt="API demo" width="600">
 
 ![CI](https://github.com/Afsheen21/volatility-forecaster/actions/workflows/ci.yml/badge.svg)
 
@@ -76,7 +75,7 @@ With a random shuffle split, which leaks information between neighbouring days, 
 **What this project does demonstrate:** the engineering pipeline (data collection, API, tests, CI, Docker). **What it does not demonstrate:** a forecasting model that beats a simple baseline.
 
 ## Example Request
-
+<img src="Image%20demo.png" alt="API demo" width="600">
 ```
 GET /predict/AAPL
 ```
